@@ -31,7 +31,7 @@ type CarDetailParams = {
 const CarDetail = () => {
   const { brandId, carId } = useParams<CarDetailParams>();
   const navigate = useNavigate();
-  const [car, setCar] = useState(null);
+  const [car, setCar] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -48,13 +48,13 @@ const CarDetail = () => {
       return;
     }
 
-    const car = brand.models.find((model) => model.id === carId);
-    if (!car) {
+    const carFound = brand.models.find((model) => model.id === carId);
+    if (!carFound) {
       console.error(`Car with ID ${carId} not found in brand ${brandId}.`);
       return;
     }
 
-    setCar(car);
+    setCar(carFound);
     setIsLoading(false);
   }, [brandId, carId]);
 
@@ -80,8 +80,8 @@ const CarDetail = () => {
   return (
     <>
       <Helmet>
-        <title>{car.name} - {car.brand} Details</title>
-        <meta name="description" content={`Learn more about the ${car.name} from ${car.brand}, including specs, features, and more.`} />
+        <title>{`${car.name} - ${car.brand ? car.brand : brandId} Details`}</title>
+        <meta name="description" content={`Learn more about the ${car.name} from ${car.brand ? car.brand : brandId}, including specs, features, and more.`} />
       </Helmet>
 
       <Navbar />
@@ -95,7 +95,7 @@ const CarDetail = () => {
         >
           <Button variant="ghost" onClick={() => navigate(`/brand/${brandId}`)}>
             <ChevronLeft className="mr-2 h-4 w-4" />
-            Back to {car.brand}
+            Back to {car.brand ? car.brand : brandId}
           </Button>
         </motion.div>
 
@@ -137,25 +137,25 @@ const CarDetail = () => {
               <div className="flex items-center gap-2">
                 <Fuel className="h-5 w-5 text-primary" />
                 <span>
-                  <strong>Fuel Type:</strong> {car.fuelType}
+                  <strong>Fuel Type:</strong> {car.specs?.fuelType || car.fuelType}
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <Power className="h-5 w-5 text-primary" />
                 <span>
-                  <strong>Engine:</strong> {car.engine}
+                  <strong>Engine:</strong> {car.specs?.engine || car.engine}
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="h-5 w-5 text-primary" />
                 <span>
-                  <strong>0-100 km/h:</strong> {car.acceleration} s
+                  <strong>0-100 km/h:</strong> {car.specs?.acceleration || car.acceleration} s
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <Gauge className="h-5 w-5 text-primary" />
                 <span>
-                  <strong>Top Speed:</strong> {car.topSpeed} km/h
+                  <strong>Top Speed:</strong> {car.specs?.topSpeed || car.topSpeed} km/h
                 </span>
               </div>
               <div className="flex items-center gap-2">
@@ -167,13 +167,13 @@ const CarDetail = () => {
                <div className="flex items-center gap-2">
                 <BatteryMedium className="h-5 w-5 text-primary" />
                 <span>
-                  <strong>Power:</strong> {car.power} HP
+                  <strong>Power:</strong> {car.specs?.power || car.power} HP
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <CircleDollarSign className="h-5 w-5 text-primary" />
                 <span>
-                  <strong>Price:</strong> ${car.price}
+                  <strong>Price:</strong> {car.price}
                 </span>
               </div>
             </motion.div>
@@ -182,7 +182,7 @@ const CarDetail = () => {
               variants={fadeIn('up', { delay: 0.7 })}
               className="mt-8"
             >
-              <Button className="w-full md:w-auto" onClick={() => window.open(car.officialWebsite, "_blank")}>
+              <Button className="w-full md:w-auto" onClick={() => window.open(car.officialWebsite || `https://www.${brandId}.com`, "_blank")}>
                 Visit Official Website
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
