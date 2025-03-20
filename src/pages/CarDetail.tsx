@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -21,13 +22,14 @@ import Footer from '@/components/Footer';
 import { brands } from '@/data/carsData';
 import { Skeleton } from '@/components/ui/skeleton';
 
-interface CarDetailProps {
+// Changed type definition to use a Record for useParams compatibility
+type CarDetailParams = {
   brandId: string;
   carId: string;
-}
+};
 
 const CarDetail = () => {
-  const { brandId, carId } = useParams<CarDetailProps>();
+  const { brandId, carId } = useParams<CarDetailParams>();
   const navigate = useNavigate();
   const [car, setCar] = useState(null);
   const [isLoading, setIsLoading] = useState(true);

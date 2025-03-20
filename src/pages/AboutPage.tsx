@@ -1,8 +1,7 @@
-
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { Users, Code, Phone, Mail, Smartphone, Tablet, Monitor } from 'lucide-react';
+import { Users, Code, Phone, Mail, Smartphone, Tablet, Monitor, MapPin } from 'lucide-react';
 
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
